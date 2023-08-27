@@ -1,42 +1,16 @@
-const { Sequelize } = require('sequelize');
-
-const sequelize = new Sequelize('Server=localhost;Database=master;Trusted_Connection=True;');
+const dbConfig = require("../config/db.config.js");
 
 
-// try {
-//     await sequelize.authenticate();
-//     console.log('Connection has been established successfully.');
-// } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-// }
+const { mongoose } = require("mongoose");
+// mongoose.connect(dbConfig.DB_URI, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//     })
+//     .then(() => console.log("Database Connected"))
+//     .catch((err) => console.log(err));
 
 const db = {};
-
-db.sequelize = sequelize;
-
-db.user = require("./models/User")(sequelize);
-
+mongoose.Promise = global.Promise;
+db.mongoose = mongoose;
+db.user = require("./models/User");
 module.exports = db;
-
-//
-// const Sequelize = require("sequelize");
-// const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-//     host: dbConfig.HOST,
-//     port: dbConfig.PORT,
-//     dialect: dbConfig.dialect,
-//     pool: {
-//         max: dbConfig.pool.max,
-//         min: dbConfig.pool.min,
-//         acquire: dbConfig.pool.acquire,
-//         idle: dbConfig.pool.idle,
-//     },
-// });
-//
-// const db = {};
-//
-// db.Sequelize = Sequelize;
-// db.sequelize = sequelize;
-//
-// db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-//
-// module.exports = db;

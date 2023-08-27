@@ -64,5 +64,35 @@
           "RX Weights: 205lb/145lb"
         ]
       }
+    ],
+
+    "users": [
+      {
+        "id": "1",
+        "username": "admin",
+        "password": "admin",
+        "name": "Admin",
+        "email": "admin@gmail.com"
+      },
+      {
+        "id": "2",
+        "username": "quyen",
+        "password": "quyen",
+        "name": "Hồ Thanh Quyền",
+        "email": "hothanhquyenbkhcm@gmail.com"
+      }
+    ],
+
+    "users_point": [
+      {
+        "id": "1",
+        "user_id": 1,
+        "point": 1000
+      },
+      {
+        "id": "2",
+        "user_id": 2,
+        "point": 1000
+      }
     ]
-  }
+}
