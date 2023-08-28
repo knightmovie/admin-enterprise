@@ -3,6 +3,7 @@ const { v4: uuid } = require("uuid");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../database_v1/models/User");
+const AuthUser = require("../database_v1/models/AuthUser");
 const AuthConfig = require("../config/auth.config");
 
 const login = async (req, res) => {
@@ -28,7 +29,7 @@ const login = async (req, res) => {
             {
                 algorithm: 'HS256',
                 allowInsecureKeySizes: true,
-                expiresIn: 86400, // 24 hours
+                expiresIn: 30, // 24 hours
             });
 
         return res.status(200).send({
@@ -51,8 +52,8 @@ const register = async (req, res) => {
         password: bcrypt.hashSync(req.body.password, 8)
     };
     try {
-        let result =  await User.create(user);
-        result = user.toObject();
+        let result = await User.create(user)
+        result = result.toObject();
         return {
             name: result.name,
             email: result.email,
@@ -65,8 +66,32 @@ const register = async (req, res) => {
 
 };
 
-const forgetPassword = () => {
-    return Authenticate.forgetPassword();
+const forgetPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({email: email});
+        if (!user) {
+            return res.status(401).send({ status: "FAIL", message: "Incorrect email address!" });
+        }
+
+        const token = jwt.sign({ user: user },
+            AuthConfig.secret,
+            {
+                algorithm: 'HS256',
+                allowInsecureKeySizes: true,
+                expiresIn: 30, // 24 hours
+            });
+
+        await AuthUser.deleteMany({email: email});
+        const auth = {
+            email: email,
+            token: token
+        }
+        await AuthUser.create(auth);
+        return res.status(200).send({ status: "SUCCESS", message: "Correct email address!", data: auth });
+    } catch (error) {
+        throw error;
+    }
 };
 
 const logout = () => {

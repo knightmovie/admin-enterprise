@@ -2,11 +2,11 @@
 
 const express = require("express");
 const giftController = require("../../controlers/giftController");
-const {auth} = require("../../middleware/auth");
+const AuthMiddleware = require("../../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", auth, giftController.getAllGifts);
+router.get("/", AuthMiddleware.verifyToken, giftController.getAllGifts);
 
 router.get("/:giftId", giftController.getOneGift);
 

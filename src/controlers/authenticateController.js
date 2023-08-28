@@ -11,9 +11,12 @@ const login = async (req, res) => {
     }
 };
 
-const forgetPassword = (req, res) => {
-    const allGifts = authenticateService.forgetPassword();
-    res.send({ status: "OK", data: allGifts });
+const forgetPassword = async (req, res) => {
+    try {
+        await authenticateService.forgetPassword(req, res);
+    } catch (error) {
+        return res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    }
 };
 
 const register = async (req, res) => {
