@@ -36,6 +36,8 @@ db.mongoose.connect(`mongodb://${DBConfig.HOST}:${DBConfig.PORT}/${DBConfig.DATA
 app.use("/api/v1", v1Router);
 app.use("/api/v1/gift", giftRouter);
 app.use("/api/v1/authenticate", authenticateRouter);
+app.use(express.static('public'));
+app.use('/images', express.static('images'));
 
 app.listen(PORT, () => {
   console.log(`API is listening on port ${PORT}`);

@@ -6,6 +6,8 @@ const User = require("../database_v1/models/User");
 const AuthUser = require("../database_v1/models/AuthUser");
 const AuthConfig = require("../config/auth.config");
 
+
+
 const login = async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -31,6 +33,7 @@ const login = async (req, res) => {
                 allowInsecureKeySizes: true,
                 expiresIn: 30, // 24 hours
             });
+
 
         return res.status(200).send({
             id: user._id,
@@ -73,7 +76,6 @@ const forgetPassword = async (req, res) => {
         if (!user) {
             return res.status(401).send({ status: "FAIL", message: "Incorrect email address!" });
         }
-
         const token = jwt.sign({ user: user },
             AuthConfig.secret,
             {
