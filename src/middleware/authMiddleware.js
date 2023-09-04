@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const AuthConfig = require("../config/auth.config");
 const User = require("../database_v1/models/User");
-
+const Admin = require("../database_v1/models/Admin");
 const checkDuplicateRegister = async (req, res, next) => {
     try {
         const user =  await User.findOne({
@@ -12,6 +12,29 @@ const checkDuplicateRegister = async (req, res, next) => {
         }
 
         const email = await User.findOne({
+            email: req.body.email
+        });
+
+        if (email) {
+            return res.status(400).send({ message: "Email is already exist!" });
+        }
+
+    } catch (error) {
+        return res.status(error?.status || 500).send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+    next();
+}
+
+const checkDuplicateAdminRegister = async (req, res, next) => {
+    try {
+        const user =  await Admin.findOne({
+            username: req.body.username
+        })
+        if (user) {
+            return res.status(400).send({ message: "Username is already exist!" });
+        }
+
+        const email = await Admin.findOne({
             email: req.body.email
         });
 
@@ -46,5 +69,6 @@ const verifyToken = async (req, res, next) => {
 
 module.exports = {
     verifyToken,
-    checkDuplicateRegister
+    checkDuplicateRegister,
+    checkDuplicateAdminRegister
 }

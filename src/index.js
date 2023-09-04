@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const v1Router = require("./v1/routes");
 const giftRouter = require("./v1/routes/giftRoutes");
 const authenticateRouter = require("./v1/routes/authenticateRoutes");
+const adminRouter = require("./v1/routes/adminAuthRoutes");
+
 const cors = require("cors");
 
 
@@ -35,6 +37,7 @@ db.mongoose.connect(`mongodb://${DBConfig.HOST}:${DBConfig.PORT}/${DBConfig.DATA
 
 app.use("/api/v1", v1Router);
 app.use("/api/v1/gift", giftRouter);
+app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/authenticate", authenticateRouter);
 app.use(express.static('public'));
 app.use('/images', express.static('images'));
